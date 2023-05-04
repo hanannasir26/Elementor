@@ -1,0 +1,453 @@
+<?php
+
+class ElementorPostswidget extends \Elementor\Widget_Base {
+
+	
+
+		public function get_name(){
+
+			return "custom_controls_post";
+
+		}
+
+		public function get_title(){
+
+			return "Get Custom Controls";
+
+		}
+
+		public function get_icon(){
+
+			return "eicon-gallery-justified";
+
+		}
+
+		public function get_categories(){
+
+			return ['general'];
+
+		}
+
+		protected function _register_controls(){
+
+
+
+
+
+			/*$this->start_controls_section('content_section',['label'=>'Content', 'tab'=>\Elementor\Controls_Manager::TAB_CONTENT,]);
+
+			$this->add_control('postsnooffset', ['label'=>'Enter No of Posts offset','type'=>Elementor\Controls_Manager::NUMBER, 'input_type'=> 'number', 'default'=> '0']);
+
+			$this->end_controls_section();*/
+
+			
+
+			// control 1
+
+			$this->start_controls_section('content_section',['label'=>'Content', 'tab'=>\Elementor\Controls_Manager::TAB_CONTENT,]);
+
+			$this->add_control('ordersummary', [
+
+			
+
+				'label'=>'API Call Back For All Partner Orders',
+
+				'type'=>Elementor\Controls_Manager::URL, 
+
+				'placeholder' => __( 'https://your-link.com', 'plugin-domain' ),
+
+				'show_external' => true,
+
+				'default' => [
+
+					'url' => '',
+
+					'is_external' => true,
+
+					'nofollow' => true,
+
+				],
+
+				
+
+				]
+
+				
+
+				);
+
+			$this->end_controls_section();
+
+			
+
+			
+
+			// control 2
+
+			$this->start_controls_section('content_section',['label'=>'Content', 'tab'=>\Elementor\Controls_Manager::TAB_CONTENT,]);
+
+			$this->add_control('pagetagline', ['label'=>'Page Tag Line','type'=>Elementor\Controls_Manager::TEXT, 'input_type'=> 'text']);
+
+			$this->end_controls_section();
+
+			
+
+			
+
+			// control 3
+
+			$this->start_controls_section('content_section',['label'=>'Content', 'tab'=>\Elementor\Controls_Manager::TAB_CONTENT,]);
+
+			$this->add_control('businesslink', [
+
+			
+
+				'label'=>'Business Page Link',
+
+				'type'=>Elementor\Controls_Manager::URL, 
+
+				'placeholder' => __( 'https://your-link.com', 'plugin-domain' ),
+
+				'show_external' => true,
+
+				'default' => [
+
+					'url' => '',
+
+					'is_external' => true,
+
+					'nofollow' => true,
+
+				],
+
+				
+
+				]
+
+				
+
+				);
+
+			$this->end_controls_section();
+
+
+
+			// control 4
+
+			$this->start_controls_section('content_section',['label'=>'Content', 'tab'=>\Elementor\Controls_Manager::TAB_CONTENT,]);
+
+			$this->add_control('indlink', 
+
+				[
+
+				
+
+					'label'=>'Individual Link',
+
+					'type'=>Elementor\Controls_Manager::URL, 
+
+					'placeholder' => __( 'https://your-link.com', 'plugin-domain' ),
+
+					'show_external' => true,
+
+					'default' => [
+
+						'url' => '',
+
+						'is_external' => true,
+
+						'nofollow' => true,
+
+					],
+
+					
+
+					]
+
+					);
+
+					
+
+			$this->end_controls_section();
+
+			
+
+			
+
+			// control 5
+
+			$this->start_controls_section('content_section',['label'=>'Content', 'tab'=>\Elementor\Controls_Manager::TAB_CONTENT,]);
+
+			$this->add_control(
+
+				'section_background_image',
+
+				[
+
+					'label' => __( 'Choose Background Image', 'plugin-domain' ),
+
+					'type' => \Elementor\Controls_Manager::MEDIA,
+
+					'default' => [
+
+						'url' => \Elementor\Utils::get_placeholder_image_src(),
+
+					],
+
+				]
+
+			);
+
+					
+
+			$this->end_controls_section();
+
+			
+
+			// Control 6
+
+			$this->start_controls_section('content_section',['label'=>'Content', 'tab'=>\Elementor\Controls_Manager::TAB_CONTENT,]);
+
+			$this->add_control('allpartners', [
+
+			
+
+				'label'=>'Api Call Back To Display All Partners',
+
+				'type'=>Elementor\Controls_Manager::URL, 
+
+				'placeholder' => __( 'https://your-link.com', 'plugin-domain' ),
+
+				'show_external' => true,
+
+				'default' => [
+
+					'url' => '',
+
+					'is_external' => true,
+
+					'nofollow' => true,
+
+				],
+
+				
+
+				]
+
+				
+
+				);
+
+			$this->end_controls_section();
+
+			
+
+
+
+		}
+
+		protected function render(){
+
+			 $atts = $this->get_settings_for_display();
+
+				 $page_tagline = $atts['pagetagline'];
+
+				 $b_link = $atts['businesslink'];
+
+				 $ind_link = $atts['indlink'];
+
+				 $ordersummary = $atts['ordersummary'];
+
+				 $section_backgroundimage = $atts['section_background_image'];
+
+				  $all_partners = $atts['allpartners'];
+
+				 
+
+				 
+
+				
+
+				//calling api to get data
+
+				if(!empty($ordersummary['url']))
+
+				 {
+
+				   $homepage = file_get_contents($ordersummary['url']);
+
+				 }
+
+				 else
+
+				 {
+
+				 	$homepage = file_get_contents('');
+
+				 }
+
+				 
+
+				$total_order_summary = json_decode($homepage);
+
+			
+				$total_trees_planted = $total_order_summary->totalQuantity;
+
+				
+
+				$PoundsofTotalCarbonOffset1 = $total_trees_planted * 679.7;
+				
+
+				$PoundsofTotalCarbonOffset2 = $PoundsofTotalCarbonOffset1 / 1000000;   // converting into million and then making it in round
+
+				
+
+				$PoundsofTotalCarbonOffset = number_format($PoundsofTotalCarbonOffset2, 2); // 123,456.7890
+				
+			//	$YearsofDriving = round($PoundsofTotalCarbonOffset1 / 10141.3);
+
+                $YearsofDriving = round($total_trees_planted / 15);
+				
+
+				$MilesofAirTravel = round($PoundsofTotalCarbonOffset1 / 53.3);
+				 
+				 $MilesofAirTravel1 = $MilesofAirTravel / 1000000;
+				 
+				 $MilesofAirTravel2 = number_format ($MilesofAirTravel1, 2);
+
+				$DaysofWorkCreated = $total_trees_planted / 100 ;	 
+
+			 ?>
+
+			 
+
+
+
+			 <div class="first-section">
+
+
+
+ 		 <img src="<?php echo $section_backgroundimage['url'];?>" alt="" style="width:100%; height: calc(100vh - 74px);">
+
+
+
+ 
+
+
+
+  <div class="centered">
+
+
+
+     <div class="planted">
+
+
+
+        <div id="no-of-trees"><?php echo number_format($total_trees_planted); ?></div>
+
+
+
+        <div class="trees">trees planted</div>
+
+
+
+    </div>  
+
+
+
+    <div class="join"><?php echo $page_tagline; ?><!--Join the climate battle.--></div>
+
+
+
+
+
+
+
+    <div class="red-buttons">
+
+
+
+     <div class="inner"><button class="businessBtn" onclick="window.open('<?php echo $b_link['url']; ?>','_blank')" >Businesses</button></div>
+
+
+
+        <div class="inner"><button class="businessBtn" onclick="window.open('<?php echo $ind_link['url']; ?>','_blank')">INDIVIDUALS</button></div>
+
+    </div>
+
+
+    </div>
+
+
+</div>
+
+            <div class="estimated">(estimated impact)</div>
+
+			 <div class="second-section">
+
+
+
+
+
+
+
+  <div class="column">
+
+    <div class="column-data">
+
+    <h2 id="PoundsofTotalCarbonOffset"><?php echo $PoundsofTotalCarbonOffset ."M"; ?></h2>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="column">
+
+  <div class="column-data">
+
+    <h2 id="no-of-days"><?php echo number_format($DaysofWorkCreated); ?></h2>
+
+  </div>
+
+  </div>
+
+
+
+  <div class="column">
+
+  <div class="column-data">
+
+    <h2 id="no-of-years"><?php echo number_format(round($total_trees_planted / 15)); //echo number_format($YearsofDriving); ?></h2>
+
+  </div>
+
+  </div>
+
+
+
+  <div class="column">
+
+  <div class="column-data">
+
+    <h2 id="no-of-miles"><?php echo $MilesofAirTravel2 ."M"; ?></h2>
+
+
+  </div>
+
+
+  </div>
+
+
+
+</div>
+
+
+			 <?php     
+
+		}
+
+	} 
+
+	
