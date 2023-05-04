@@ -13,7 +13,7 @@ add_action('init', function()
 
   if(did_action('elementor/loaded'))
   { 
-      require_once DIR . '/elementor_templates/elementor_all_partner_widget.php'; \Elementor\Plugin::instance()->widgets_manager->register_widget_type( new ElementorPostswidget() ); 
+      require_once DIR . '/elementor_templates/elementor_custom_widget.php'; \Elementor\Plugin::instance()->widgets_manager->register_widget_type( new ElementorPostswidget() ); 
   }
 
 });
