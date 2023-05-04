@@ -1,0 +1,239 @@
+<?php
+
+	class ElementorCustomWidgetwidget extends \Elementor\Widget_Base {
+	
+		public function get_name(){
+			return "Custom Widget";
+		}
+		public function get_title(){
+			return "Get Custom Widget";
+		}
+		public function get_icon(){
+			return "eicon-gallery-justified";
+		}
+		public function get_categories(){
+			return ['general'];
+		}
+		protected function _register_controls()
+		{
+
+
+		}
+		
+		protected function render()
+		{
+			  
+				
+				$partner_id = $_GET['chash'];
+				
+				//echo "partnerid = ". $partner_id;
+			
+				// getting partner informations
+				
+				$partnerurl = 'https://us-east-1.amazonaws.com/prod/partners/'.$partner_id; 
+				$partner_page = file_get_contents($partnerurl);
+				$partner_details = json_decode($partner_page);
+				
+			
+				
+				
+				foreach($partner_details as $partnerdetails)
+				{
+				
+					 $partner_final_details = [];
+					foreach($partnerdetails as $partnerdetail)
+					{
+						
+						$partner_final_details[] .=  $partnerdetail->S;
+					}
+					
+				}
+				
+					$newIndex;
+				  $newArray=array();
+			        foreach($partner_details as $partnerdetails)
+			        {    
+                    
+                     foreach($partnerdetails as $key=>$value)
+                     {
+                         
+                     $newIndex = $key;
+                     $newArray[] = $newIndex;
+                     //echo $newIndex . "<br>";
+        
+                     }
+                    }
+
+                    if (is_array($partner_final_details)) {
+						$final_data = array_combine( $newArray, $partner_final_details);
+								} 
+					  else {
+						  
+								  }
+								  
+                     //print_r ($final_data);
+				
+				
+				
+				// getting partner order summary
+				
+				$partnerorderurl = 'https://us-east-1.amazonaws.com/prod/orders-summary/'.$partner_id; 
+				$partner_order_page = file_get_contents($partnerorderurl);
+				$partner_order_details = json_decode($partner_order_page);
+				
+				
+				$total_trees_planted = $partner_order_details->totalQuantity;
+								
+								
+								
+								
+				$PoundsofTotalCarbonOffset1 = $total_trees_planted * 1000;
+								
+				$PoundsofTotalCarbonOffset2 = $PoundsofTotalCarbonOffset1 / 1000000;   // converting into million and then making it in round
+								
+				$PoundsofTotalCarbonOffset = number_format($PoundsofTotalCarbonOffset2, 2); // 123,456.7890
+								 
+			//	$YearsofDriving = round($PoundsofTotalCarbonOffset1 / 10141.3);
+				$YearsofDriving = round(($total_trees_planted * 8) / 48);
+								
+				$MilesofAirTravel = round($PoundsofTotalCarbonOffset1 / 1000);
+								
+				$DaysofWorkCreated = $total_trees_planted / 100 ;
+			
+			?>
+
+
+
+
+<section class="arra-dashboard">
+
+    <div class="parent">
+
+        <video autoplay muted loop>
+
+	        <source src="https://www.yourwebsite.com/wp-content/uploads/2023/03/video.mp4" type="video/mp4" />
+        	<!-- <source src="https://vimeo.com/810312476" type="video/mp4"> -->
+        
+		</video>
+		
+		<div class="overly-video"></div>
+        
+		<div class="content-container">
+        
+		  <div class="logo-img">
+         	 <a href="<?php echo $final_data['website']; ?>" target="_blank"><img src="<?php echo $final_data['logo']; ?>" alt="" /></a>
+          </div>
+          
+		  <div class="tag-line-head">          
+            <h2 class="sub-head">YOUR ECO-FRIENDLY DEALERSHIP</h2>
+          </div>
+          
+		  <div class="stats-sec">
+              
+			    <div class="col-1">
+              
+			        <h2 class="tree-total"><?php if(empty($total_trees_planted)){ echo "0"; }else{ echo $total_trees_planted; } ?></h2>
+                    <h3 class="tree-title">TREES PLANTED</h2>
+
+                </div>
+                
+				<div class="col-2">
+                
+				    <h2 class="year-drive"><?php echo $YearsofDriving; ?></h2>
+                    <h3 class="drive-title">YEARS OF DRIVING OFFSET</h2>
+                
+				</div>
+            
+			</div>
+            
+		  <div class="bottom-info">
+                
+				<h2 class="bold-heading">48 TREES PLANTED</h2>
+                
+				<p class="desc-para">per vehicle to offset emissions created during manufacturing and the entire ownership of the vehicle on average.</p>
+                
+				<div class="red-buttons">
+                
+				    <div class="inner">
+                
+				        <a href="<?php echo $final_data['link1']; ?>" target="_blank">
+					         <button class="businessBtn" >view inventory</button>
+					    </a>
+					        
+                        <span class="estimated">(estimated impact)</span>
+                    
+					</div>
+                    
+					<div class="inner">
+                    
+					    <a href="<?php echo $final_data['link2']; ?>" target="_blank"></a>
+						
+                    </div>
+
+					<div class="sign-btn">
+				     
+					 <h3 class="sign-up-link"><a href="<?php echo esc_url(home_url()); ?>/vehicle-offset-partner-form/?chash=<?php echo $partner_id; ?>" target="_blank">Sign up here</a></h3>
+
+				 	</div>
+                  
+				  </div>
+           
+            </div>
+
+        </div>
+      
+	 </div>
+
+</section>
+
+<section class="second-sec">
+    
+	<div class="three-col-sec">
+    
+	    <div class="co-cal">
+    
+	        <div class="icon">
+                <i class="icon1"></i>
+            </div>
+           
+		    <h2 class="pounds-co"><?php echo $PoundsofTotalCarbonOffset; ?></h2>
+           
+		    <h3 class="pounds-co-title">pounds of Carbon Offset</h2>
+
+        </div>
+        
+		<div class="day-work-cal">
+        
+		    <div class="icon">
+                <i class="icon1"></i>          
+             </div>
+        
+		    <h2 class="work-stats"><?php echo $DaysofWorkCreated; ?></h2>
+        
+		    <h3 class="work-stats-title">days of work provided</h2>
+
+        </div>
+        
+		<div class="air-miles-cal">
+        
+		    <div class="icon">
+                <i class="icon1"></i>         
+            </div>
+        
+		    <h2 class="air-miles-stats"><?php echo $MilesofAirTravel; ?></h2>
+        
+		    <h3 class="air-miles-title">miles of air travel</h2>
+
+        </div>
+		
+    </div>
+	
+</section>
+
+
+<?php 		  
+		
+		}
+	}
+	
+?>
