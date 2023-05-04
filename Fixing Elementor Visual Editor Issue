@@ -1,0 +1,35 @@
+  /**
+  * Loading the elementor Tool Bar
+  **/
+  
+  var getIndexedToolbars = function (settings, defaultToolbar) {
+      var toolbars = [];
+      for (var i = 1; i < 10; i++) {
+        var toolbar = settings['toolbar' + i];
+        if (!toolbar) {
+          break;
+        }
+        toolbars.push(toolbar);
+      }
+      var mainToolbar = settings.toolbar ? [settings.toolbar] : [defaultToolbar];
+      return toolbars.length > 0 ? toolbars : mainToolbar;
+    };
+    var getToolbars = function (editor) {
+      var toolbar = editor.getParam('toolbar');
+      var defaultToolbar = 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image';
+      if (toolbar === false) {
+        return [];
+      } else if (global$2.isArray(toolbar)) {
+        return global$2.grep(toolbar, function (toolbar) {
+          return toolbar.length > 0;
+        });
+      } else {
+        return getIndexedToolbars(editor.settings, defaultToolbar);
+      }
+    };
+
+    var global$3 = tinymce.util.Tools.resolve('tinymce.dom.DOMUtils');
+
+    var global$4 = tinymce.util.Tools.resolve('tinymce.ui.Factory');
+
+    var global$5 = tinymce.util.Tools.resolve('tinymce.util.I18n');
