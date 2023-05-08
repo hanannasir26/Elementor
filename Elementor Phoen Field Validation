@@ -1,0 +1,34 @@
+We have multiple ways to validate Elementor Phone field
+  
+  - Using jQuery snippets
+
+/**
+* jQuery Function to validate the user input in elementor phone field
+* Auto format the phone number xxx-xxx-xxxx 
+**/
+
+jQuery(document).ready(function() {
+  // Append error message and pattern attribute by default
+  jQuery('.elementor-field-group-field_d82c278').append('<span id="customphonevalid"></span>');
+  jQuery('#form-field-field_d82c278').attr('pattern', '[0-9]{3}-[0-9]{3}-[0-9]{4}');
+
+  // Handle keypress event on the phone field
+  jQuery('#form-field-field_d82c278').keypress(function(e) {
+    var charCode = (e.which) ? e.which : event.keyCode;
+
+    // Allow only numeric input
+    if (String.fromCharCode(charCode).match(/[^0-9]/g)) {
+      // Show error message
+      jQuery('#customphonevalid').text('Please Enter A Valid Phone Number (xxx-xxx-xxxx)');
+      return false;
+    }
+
+    // Format phone number with US pattern
+    var phoneNumber = jQuery('#form-field-field_d82c278').val().replace(/\D/g,'');
+    var formattedPhoneNumber = phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+    jQuery('#form-field-field_d82c278').val(formattedPhoneNumber);
+
+    // Clear error message
+    jQuery('#customphonevalid').text('');
+  });
+});
